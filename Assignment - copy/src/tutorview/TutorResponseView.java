@@ -80,7 +80,7 @@ class TutorResponseView extends TutorView {
 						Contract.postContract(bid.getInitiatorId(), user.getId(), 
 								bid.getSubject().getId(),
 								new ContractAddInfo(true, true));
-						bid.closeDownBid(bid.getId());
+						Bid.closeDownBid(bid.getId());
 						Utils.SUCCESS_CONTRACT_CREATION.show();
 					} else {
 						Utils.INSUFFICIENT_COMPETENCY.show();
