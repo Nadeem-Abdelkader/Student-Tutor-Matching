@@ -12,22 +12,19 @@ import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 import mainview.MouseClickListener;
-import mainview.Observer;
 import model.Contract;
-import model.User;
 
 /**
  * View that displays all contracts where this Student is first party
  */
-public class StudentAllContracts extends JPanel implements Observer {
+public class StudentAllContracts extends JPanel {
 	public static final int CONTRACT_QUOTA = 5; 
 	private JList<Contract> contractList;
 	List<Contract> contracts;
-	private User user;
-	public StudentAllContracts(User user) {
+	public StudentAllContracts(List<Contract> contracts) {
 		super(new BorderLayout());
-		this.user = user;
-		this.contracts = (new Contract()).getAllContractsAsFirstParty(user.getId());
+		this.setBackground(Color.CYAN);
+		this.contracts = contracts;
 		placeComponents();
 	}
 	
@@ -85,11 +82,5 @@ public class StudentAllContracts extends JPanel implements Observer {
 			return this;
 		}
 		
-	}
-
-	@Override
-	public void update() {
-		this.contracts = (new Contract()).getAllContractsAsFirstParty(this.user.getId());
-		this.placeComponents();
 	}
 }
