@@ -16,19 +16,24 @@ import mainview.View;
  */
 public class TutorView extends View implements NavigationPane{
 	protected User user;
-	private JButton viewAllBids = new JButton("View All Bids");
-	private JButton viewContracts = new JButton("View Contracts");
-	protected JPanel main;
+	public JButton viewAllBids = new JButton("View All Bids");
+	public JButton viewContracts = new JButton("View Contracts");
+	public JPanel main = createPanel(new BorderLayout());
 	public TutorView(Display display, User user) {
 		super(display);
 		this.user = user;
+//		viewAllBids = new JButton("View All Bids");
+//		viewContracts = new JButton("View Contracts");
+//		main = createPanel(new BorderLayout());
+//		showNavigationPane(display, main, new JButton[]{homeButton, viewAllBids, viewContracts});
+//		this.display.setVisible();
 	}
 
 	protected void placeComponents() {
 		main = createPanel(new BorderLayout());
 		this.display.setVisible();
 		setSwitchPanelListener(main, homeButton, new HomeView(display, user));
-		setSwitchPanelListener(main, viewAllBids, new TutorAllBidsView(display, user));
+		setSwitchPanelListener(main, viewAllBids, new TutorAllBids(display, user));
 		setSwitchPanelListener(main, viewContracts, new TutorAllContractsView(display, user));
 		showNavigationPane(display, main, new JButton[]{homeButton, viewAllBids, viewContracts});
 		this.display.setVisible();
