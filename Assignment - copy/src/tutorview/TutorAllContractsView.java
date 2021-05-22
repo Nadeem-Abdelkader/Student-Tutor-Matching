@@ -20,7 +20,7 @@ import model.User;
 /**
  * This is the View for the Tutor to see all the contracts that involves them as the second party
  */
-class TutorAllContractsView extends TutorView {
+public class TutorAllContractsView extends TutorView {
 	public TutorAllContractsView(Display display, User user) {
 		super(display, user);
 	}
