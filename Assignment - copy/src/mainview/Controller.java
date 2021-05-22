@@ -1,15 +1,14 @@
 package mainview;
 
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.List;
+import model.MatchRequest;
 
 import model.Bid;
 import model.BidAddInfo;
 import model.BidResponse;
 import model.Contract;
 import model.ContractAddInfo;
-import model.EventType;
 import model.Message;
 import model.Subject;
 import model.User;
@@ -19,22 +18,27 @@ import studentview.StudentAllContracts;
 import studentview.StudentMessageView;
 import studentview.StudentResponseView;
 import studentview.StudentView;
-import tutorview.TutorAllBidsView;
+import tutorview.TutorAllBids;
+import tutorview.TutorAllContractsView;
+import tutorview.TutorView;
 
 public class Controller {
     private Display display;
     private User user;
     private List<Bid> allBids;
+    private List<MatchRequest> allRequests;
     private List<Contract> contractsAsFirstParty, contractsAsSecondParty;
     private HomeView homeView;
     private StudentAllBids studentAllBids;
     private StudentAllContracts studentAllContracts;
     private CreateRequest createRequest;
     private StudentView studentView;
+    private TutorView tutorView;
+    private TutorAllBids tutorAllBidsView;
+    private TutorAllContractsView tutorAllContractsView;
     private StudentResponseView studentResponse;
     private StudentMessageView studentMessage;
     private Bid activeBid, tempBid = new Bid();
-    private Contract tempContract = new Contract();
     private Message activeMessage;
     // private TutorAllBidsView tutorAllBids;
 
@@ -74,8 +78,8 @@ public class Controller {
 
     private void initModels() {
         assert (this.user != null);
-        this.allBids = tempBid.getAll();
-        this.contractsAsFirstParty = (new Contract()).getAllContractsAsFirstParty(this.user.getId());
+        this.allBids = Bid.getAll();
+        this.contractsAsFirstParty = Contract.getAllContractsAsFirstParty(this.user.getId());
         this.contractsAsSecondParty = Contract.getAllContractsAsSecondParty(this.user.getId());
     }
 
@@ -84,7 +88,10 @@ public class Controller {
         this.homeView = new HomeView(display, user);
         this.studentView = new StudentView(display, user);
         this.studentAllBids = new StudentAllBids(user);
-        this.studentAllContracts = new StudentAllContracts(user);
+        this.studentAllContracts = new StudentAllContracts(contractsAsFirstParty);
+        this.tutorView = new TutorView(display, user);
+        this.tutorAllBidsView = new TutorAllBids(display, user);
+        this.tutorAllContractsView = new TutorAllContractsView(display, user);
         this.createRequest = new CreateRequest();
 
         homeView.setSwitchPanelListener(homeView.panel, homeView.studentButton, studentView);
@@ -92,6 +99,9 @@ public class Controller {
         studentView.setSwitchPanelListener(studentView.main, studentView.viewAllBids, studentAllBids);
         studentView.setSwitchPanelListener(studentView.main, studentView.viewContracts,studentAllContracts);
         studentView.setSwitchPanelListener(studentView.main, studentView.createBid, createRequest);
+        tutorView.setSwitchPanelListener(tutorView.main, tutorView.viewAllBids, tutorAllBidsView);
+        tutorView.setSwitchPanelListener(tutorView.main, tutorView.viewContracts, tutorAllContractsView);
+
 
         createRequest.setCreateRequestListener(new MouseClickListener() {
 			@Override
@@ -131,15 +141,13 @@ public class Controller {
 				display.setVisible();
             }
         });
-    
+
         studentAllContracts.setSignContractListener(new SignContractListener());
     }
 
     private void subscribeViews() {
         tempBid.subscribe(studentAllBids);
         // tempBid.subscribe(tutorAllBids);
-        tempContract.subscribe(studentAllContracts);
-        
     }
 
     class ResponseListener implements MouseClickListener{
@@ -151,13 +159,11 @@ public class Controller {
                 showStudentMessagePanel();
             } else {
                 BidResponse selectedResponse = studentResponse.getSelectedResponse();
-                if (selectedResponse == null)
-                    return;
-                (new Contract()).postContract(user.getId(), 
+                Contract.postContract(user.getId(), 
 								selectedResponse.getBidderId(), 
 								activeBid.getSubject().getId(),
 								new ContractAddInfo(true, false));
-                tempBid.closeDownBid(activeBid.getId());
+                Bid.closeDownBid(activeBid.getId());
                 Utils.SUCCESS_CONTRACT_CREATION.show();
             }
         }
@@ -190,11 +196,11 @@ public class Controller {
     class SelectBidListener implements MouseClickListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            (new Contract()).postContract(user.getId(), 
+            Contract.postContract(user.getId(), 
 						activeMessage.getPosterId(), 
 						activeBid.getSubject().getId(),
 						new ContractAddInfo(true, false));
-				tempBid.closeDownBid(activeBid.getId());
+				Bid.closeDownBid(activeBid.getId());
 				Utils.SUCCESS_CONTRACT_CREATION.show();
         }
     }
