@@ -1,6 +1,5 @@
 package studentview;
 import java.awt.BorderLayout;
-import mainview.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,7 +16,7 @@ import model.Bid;
 /**
  * The View where Student chats with the Tutor in close bidding
  */
-public class StudentMessageView extends JPanel implements MessageView, Observer{
+public class StudentMessageView extends JPanel implements MessageView{
 
 	private Message message;
 	private Bid bid;
@@ -66,12 +65,5 @@ public class StudentMessageView extends JPanel implements MessageView, Observer{
 
 	public void setSelectBidListener(MouseClickListener listener) {
 		this.selectBid.addMouseListener(listener);
-	}
-
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
 	}
 }
