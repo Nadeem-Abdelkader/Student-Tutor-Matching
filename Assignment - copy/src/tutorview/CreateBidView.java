@@ -21,7 +21,7 @@ import model.Bid;
 /**
  * This is the View where the Tutor creates the bid in open bidding
  */
-class CreateBidView extends TutorView {
+public class CreateBidView extends TutorView {
 	private Bid bid;
 	private JLabel rateLb = new JLabel("Rate");
 	private JLabel durationLb = new JLabel("Duration");
@@ -61,6 +61,7 @@ class CreateBidView extends TutorView {
 	public CreateBidView(Display display, User user, Bid bid) {
 		super(display, user);
 		this.bid = bid;
+		display();
 	}
 	
 	protected void placeComponents() {
