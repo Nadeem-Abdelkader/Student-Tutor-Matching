@@ -147,7 +147,7 @@ public class User extends Observable implements Model {
 			bids.add(new Bid(node, this));
 		}
 
-		return (new Bid()).screenClosedBid(bids);
+		return Bid.screenClosedBid(bids);
 	}
 	
 	public static User getUserbyId(String userId) {
